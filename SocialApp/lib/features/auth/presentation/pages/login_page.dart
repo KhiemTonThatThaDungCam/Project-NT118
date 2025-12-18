@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/features/auth/presentation/components/my_button.dart';
 
 import '../components/my_text_field.dart';
+import '../cubits/auth_cubit.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+
+  final void Function()? togglePages;
+
+  const LoginPage({super.key, required this.togglePages});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -18,6 +23,36 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final pwController = TextEditingController();
 
+  // login button pressed
+  void login ()
+  {
+    // prepare email & pw
+    final String email = emailController.text;
+    final String pw = pwController.text;
+
+    // auth cubit
+    final authCubit = context.read<AuthCubit>();
+
+    // ensure that the email & pw fields are not empty
+    if (email.isNotEmpty && pw.isNotEmpty) {
+      // login!
+      authCubit.login(email, pw);
+    }
+
+    // display error if some fields are empty
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Please enter both email and password"))); // SnackBar
+    }
+  }
+
+
+@override
+  void dispose() {
+    emailController.dispose();
+    pwController.dispose();
+    super.dispose();
+  }
 
 
 
@@ -74,17 +109,32 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 25),
                 // login button
                 MyButton(
-                    onTap: () {},
+                    onTap: login,
                     text: "Login",
                 ),
 
 
 
                 const SizedBox(height: 50),
-                Text(
-                  "Not a member? Register now",
-                  style:
-                    TextStyle(color: Theme.of(context).colorScheme.primary),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Not a member?",
+                      style:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                    ),
+                    GestureDetector(
+                      onTap: widget.togglePages,
+                      child: Text(
+                        " Register now",
+                        style:
+                        TextStyle(color: Theme.of(context).colorScheme.inversePrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 // not a member ? register now
               ],
