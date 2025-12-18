@@ -6,7 +6,8 @@ import 'package:social_app/features/auth/presentation/cubits/auth_states.dart';
 import 'package:social_app/features/auth/presentation/pages/auth_page.dart';
 import 'package:social_app/themes/light_mode.dart';
 
-import 'features/post/presentation/pages/home_page.dart';
+import 'features/home/presentation/pages/home_page.dart';
+
 
 
 /*
@@ -19,7 +20,7 @@ REPO: For the database
 Bloc Providers: for state management
   - auth
   - profile
-  - post
+  - home
   - search
   - theme
 Check Auth State
